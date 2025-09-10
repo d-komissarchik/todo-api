@@ -1,0 +1,8 @@
+@"
+fastapi
+uvicorn[standard]
+pydantic
+pytest
+httpx
+pytest-asyncio
+"@ | Out-File -Encoding utf8 requirements.txt
