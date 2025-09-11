@@ -1,53 +1,51 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-from typing import List
 
 app = FastAPI(title="Todo API", version="1.0.0")
 
 
 class Task(BaseModel):
-    id: int
+    id: int | None = None
     title: str
     description: str
     completed: bool
 
-tasks: List[Task] = []
+tasks: list[Task] = []
+task_id = 1
 
 @app.get("/")
 def root():
     return {"message": "Todo API"}
 
-@app.get("/tasks", response_model=List[Task])
+@app.get("/tasks", response_model=list[Task])
 def get_tasks():
     return tasks
 
 @app.post("/tasks", response_model=Task)
 def create_task(task: Task):
-    for task in tasks:
-        if task.id == task.id:
-            raise HTTPException(
-                status_code=400,
-                detail="Task already exists"
-            )
+    global task_id
+    task.id = task_id
     tasks.append(task)
+    task_id += 1
     return task
 
 @app.put("/tasks/{id}", response_model=Task)
 def update_task(id: int, updated_task: Task):
     for index, task in enumerate(tasks):
         if task.id == id:
-            task[index] = updated_task
+            updated_task.id = id
+            tasks[index] = updated_task
             return updated_task
-        raise HTTPException(
-            status_code=404,
-            detail="Task not found"
-        )
+    raise HTTPException(
+        status_code=404,
+        detail="Task not found"
+    )
 @app.delete("/tasks/{id}")
 def delete_task(id:int):
     for index, task in enumerate(tasks):
         if task.id == id:
             tasks.pop(index)
-            return {"message": f"Task {id} deleted"}
+            return {"message": f"Task with id: {id} deleted"}
     raise HTTPException(
             status_code=404,
             detail="Task not found"
