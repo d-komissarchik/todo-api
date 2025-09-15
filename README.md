@@ -43,7 +43,7 @@ All data is stored in memory (a Python list), so it will reset every time the se
 ## Installation and Running
 1. Clone the repository
 ```
-git clone https://github.com/username/todo-api.git
+git clone https://github.com/d-komissarchik/todo-api.git
 cd todo-api
 ```
 2. Install dependencies
